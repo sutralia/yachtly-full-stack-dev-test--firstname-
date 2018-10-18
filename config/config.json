@@ -1,0 +1,32 @@
+{
+  "development": {
+    "username": "syns",
+    "password": "nyoman",
+    "database": "test",
+    "host": "127.0.0.1",
+    "dialect": "postgres",
+    "operatorsAliases": false,
+    "logging": false,
+    "freezeTableName": true
+  },
+  "test": {
+    "username": "syns",
+    "password": "nyoman",
+    "database": "test",
+    "host": "127.0.0.1",
+    "dialect": "postgres",
+    "operatorsAliases": false,
+    "logging": false,
+    "freezeTableName": true
+  },
+  "production": {
+    "username": "syns",
+    "password": "nyoman",
+    "database": "test",
+    "host": "127.0.0.1",
+    "dialect": "postgres",
+    "operatorsAliases": false,
+    "logging": false,
+    "freezeTableName": true
+  }
+}

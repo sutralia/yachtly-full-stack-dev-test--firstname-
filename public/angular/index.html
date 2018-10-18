@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html ng-app="app">
+  <head>
+    <title><%= title %></title>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.28.4/sweetalert2.min.css">
+  </head>
+  <body>
+      <div id="wrapper">
+      </div>
+      <ng-view></ng-view>
+      <script src="angular.min.js"></script>
+      <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular-route.min.js"></script>
+      <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular-resource.min.js"></script>
+           <!-- Template -->
+      <script type="text/ng-template" id="/todos.html">
+        <div class="navbar">
+        <div class="navbar-inner">
+            <div class="container">
+        
+            <!-- Be sure to leave the brand out there if you want it shown -->
+            <a class="brand" ng-click="goExpress()" href="#">Form Add</a>
+        
+            <!-- Everything you want hidden at 940px or less, place within here -->
+            <div class="nav-collapse collapse">
+                <!-- .nav, .navbar-search, .navbar-form, etc -->
+            </div>
+        
+            </div>
+        </div>
+        </div>
+        <div>
+                <table class="table table-hover">
+                    <tr>
+                            <th>User ID</th>
+                            <th>Name</th>
+                            <th>Emai</th>
+                            <th>Phone Number</th>
+                            <th>Address</th>
+                            <th>Options</th>
+                    </tr>
+                    <tr ng-repeat="my in userData">
+                        <td>{{my.userID}}</td>
+                        <td>{{my.name}}</td>
+                        <td>{{my.emai}}</td>
+                        <td>{{my.phoneNumber}}</td>
+                        <td>{{my.address}}</td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+      </script>
+      
+       <script type="text/ng-template" id="/todoDetails.html">
+        <h1>{{ todo.name }}</h1>
+        completed: <input type="checkbox" ng-model="todo.completed">
+        note: <textarea>{{ todo.note }}</textarea>
+      </script>
+      <script>
+           var myapp = angular.module('app', ['ngRoute', 'ngResource'])
+               //---------------
+              // Services
+              //---------------
+               .factory('Todos', function(){
+                return [
+                  { name: 'AngularJS Directives', completed: true, note: 'add notes...' },
+                  { name: 'Data binding', completed: true, note: 'add notes...' },
+                  { name: '$scope', completed: true, note: 'add notes...' },
+                  { name: 'Controllers and Modules', completed: true, note: 'add notes...' },
+                  { name: 'Templates and routes', completed: true, note: 'add notes...' },
+                  { name: 'Filters and Services', completed: false, note: 'add notes...' },
+                  { name: 'Get started with Node/ExpressJS', completed: false, note: 'add notes...' },
+                  { name: 'Setup MongoDB database', completed: false, note: 'add notes...' },
+                  { name: 'Be awesome!', completed: false, note: 'add notes...' },
+                ];
+              })
+              myapp.factory('Users', ['$http', '$q', function($http, $q) {
+
+                var urlBase = 'http://localhost:3000/api/user';
+                var dataFactory = {};
+                var defer = $q.defer();
+                dataFactory.getUsers = function () {
+                    $http({
+                        method: 'GET',
+                        url: urlBase
+                        }).then(function successCallback(response) {
+                            console.log( response)
+                            return response
+                        }, function errorCallback(response) {
+                            // called asynchronously if an error occurs
+                            // or server returns response with an error status.
+                    });
+                };
+
+                dataFactory.getUser = function (id) {
+                    return $http.get(urlBase + '/' + id);
+                };
+
+                dataFactory.insertUser = function (cust) {
+                    return $http.post(urlBase, cust);
+                };
+
+                dataFactory.updateUser = function (cust) {
+                    return $http.put(urlBase + '/' + cust.ID, cust)
+                };
+
+                dataFactory.deleteUser = function (id) {
+                    return $http.delete(urlBase + '/' + id);
+                };
+
+                return dataFactory;
+                }])
+               //---------------
+              // Controllers
+              //---------------
+               myapp.controller('FormAddExpressCtrl', [ '$scope', 'Users', function ( $scope, Users) {
+                    $scope.goExpress = function() {
+                       location.href = '/user/add';
+                    };
+                    $scope.xx;
+                    $scope.userData = []
+                    let a = []
+                    $scope.userData = Users.getUsers()
+                    get()
+                    function get () {
+                        Users.getUsers()
+                        .then(response => {
+                            $scope.userData = response.userData
+                        })
+                    }
+
+                    console.log('xxx', $scope.userData)
+                    
+                    
+
+                }])
+               //---------------
+              // Routes
+              //---------------
+               .config(['$routeProvider', function ($routeProvider) {
+                $routeProvider
+                  .when('/', {
+                    templateUrl: '/todos.html',
+                    controller: 'FormAddExpressCtrl'
+                  })
+              }]);
+          </script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.28.4/sweetalert2.min.js"></script>
+      <script type="text/javascript">
+        //   $( document ).ready(function() {
+        //       console.log( "ready!" );
+        //       let status = $('#status').val();
+        //       console.log(status);
+        //       if (status === '1') {
+        //           console.log(status);
+        //           swal({
+        //             type: 'success',
+        //             title: 'Your data has been saved',
+        //             showConfirmButton: false,
+        //             timer: 1500
+        //           })
+        //       } else if (status === '0') {
+        //           swal({
+        //             type: 'error',
+        //             title: 'Oops...',
+        //             text: 'Something went wrong!',
+        //           })
+        //       }
+        //   });
+      </script>
+  </body>
+</html>
